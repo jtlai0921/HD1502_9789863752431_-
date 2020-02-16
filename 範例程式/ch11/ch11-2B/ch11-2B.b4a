@@ -1,0 +1,81 @@
+﻿Version=3
+IconFile=
+NumberOfModules=4
+Module1=HttpUtils
+ModuleVisible1=1
+Module2=HttpUtilsService
+ModuleVisible2=1
+Module3=Member
+ModuleVisible3=1
+Module4=Myebook
+ModuleVisible4=1
+Package=anywheresoftware.b4a.samples.sqlserver
+DoNotOverwriteManifest=False
+ManifestCode=
+UserTypesHint=
+NumberOfFiles=3
+File1=Main.bal
+File2=member.bal
+File3=Myebook.bal
+NumberOfLibraries=3
+Library1=core
+Library2=http
+Library3=json
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: B4A連結SQL_Server(檢查是否為會員)V2.0
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+    Dim Password As String        '會員密碼
+    Dim DNS1,DNS2 As String          '宣告兩個領域名稱 
+	Dim ServerUrl As String       '宣告Web Service的網址
+	'測試ASP.NET的程式是否可以讀取資料庫
+	'指定網域名稱 
+	DNS1 = "http://120.118.165.192/B4A/B4AToSQL.aspx?query=select * from Member"  
+	DNS2 = "http://120.118.165.192/B4A/B4AToSQL.aspx?query=select * from Myebook" 
+	'指定Web Service的網址
+	ServerUrl = "http://120.118.165.192/B4A/B4AToSQL.aspx"
+End Sub
+
+Sub Globals
+    Dim Label1 As Label            'B4A讀取SQL Server資料(檢查會員身份)
+	Dim edtPassword As EditText    '輸入密碼
+	Dim btnLogin As Button         '檢查會員身份
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")                                '使用「Main(版面配置檔)」來輸出
+    Activity.Title ="B4A連結SQL_Server(檢查是否為會員)V3.0"    '本頁面的標題名稱
+    If FirstTime Then                           
+		HttpUtils.CallbackActivity = "Myebook"      '設定回覆的活動頁面名稱
+		HttpUtils.CallbackJobDoneSub = "JobDone"    '設定當HTTP完成下載工作之後，所要觸發的事件名稱
+	End If
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnLogin_Click  '檢查會員身份
+ If edtPassword.Text="" Then  '檢查是否有輸入密碼
+    Msgbox("您尚未填入密碼","錯誤訊息")
+ Else
+    Password = edtPassword.Text '將輸入的密碼指定給Password變數
+    StartActivity(Member)      '啟動Myebook活動頁面
+ End If
+End Sub

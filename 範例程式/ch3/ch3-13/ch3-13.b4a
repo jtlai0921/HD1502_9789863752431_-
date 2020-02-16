@@ -1,0 +1,88 @@
+﻿Version=3
+IconFile=
+NumberOfModules=1
+Module1=BookStores
+ModuleVisible1=1
+Package=Leech.myebook.ch12.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=2
+File1=BookStores.bal
+File2=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel:網路書店APP
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+    Dim DNS As String        '領域名稱 
+	Dim BookStore As String  '出版社名稱
+End Sub
+
+Sub Globals
+	Dim livBookStores As ListView  '網路書店清單
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")
+    Activity.Title ="網路書店APP"
+	Activity.AddMenuItem("設計者：李春雄老師", "AboutApp")
+	Activity.AddMenuItem("結束", "ExitApp")
+	livBookStores.AddSingleLine2("上奇資訊","http://www.grandtech.info/")
+	livBookStores.AddSingleLine2("全華圖書","http://www.chwa.com.tw/NEWun/about.asp")
+	livBookStores.AddSingleLine2("滄海圖書","http://www.tsanghai.com.tw/")
+	livBookStores.AddSingleLine2("碁峰資訊","http://www.gotop.com.tw/")	
+	livBookStores.AddSingleLine2("文京出版社","http://www.wun-ching.com.tw/")
+	livBookStores.AddSingleLine2("台科大圖書","http://www.tiked.com.tw/")
+	livBookStores.AddSingleLine2("交通查詢","http://twtraffic.tra.gov.tw/twrail/mobile/home.aspx")
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub AboutApp_Click
+ Dim About As String 
+ About="網路書店APP" & CRLF & "設計者：李春雄老師"
+ Msgbox(About, "關於本系統")
+End Sub
+
+Sub ExitApp_Click
+    Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "網路書店APP", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+    If Msg_Value = DialogResponse.POSITIVE Then
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If
+End Sub
+
+Sub livBookStores_ItemClick (Position As Int, Value As Object)
+    DNS=Value            '取得領域名稱 
+	Select Position      '取得出版社名稱
+       Case 0: BookStore = "上奇資訊"
+       Case 1: BookStore = "全華圖書"	   
+       Case 2: BookStore = "滄海圖書"	   
+       Case 3: BookStore = "碁峰資訊"  
+	   Case 4: BookStore = "文京出版社"
+	   Case 5: BookStore = "台科大圖書"
+	   Case 6: BookStore = "交通查詢"
+    End Select  
+	StartActivity("BookStores")
+End Sub

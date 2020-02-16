@@ -1,0 +1,61 @@
+﻿Version=3
+IconFile=
+NumberOfModules=1
+Module1=Second
+ModuleVisible1=1
+Package=Leech.myebook.ch02.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=2
+File1=Main.bal
+File2=Second.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 追蹤執行順序
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+    
+End Sub
+
+Sub Globals
+    Dim RunOrder As String '追蹤執行順序
+	Dim Button1 As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+'使用時機：第一次活動被啟動時，將會執行Activity活動中的Create事件
+	Activity.LoadLayout("Main")  
+    Activity.Title = "追蹤B4A的執行順序"
+	RunOrder=1
+	Msgbox(RunOrder,"追蹤執行順序")
+End Sub
+
+Sub Activity_Resume
+'使用時機：在Activity活動的Create事件之後馬上被執行
+'          當主畫面(Main)呼叫次畫面，再返回時，最先被執行
+	RunOrder=2
+	Msgbox(RunOrder,"追蹤執行順序")
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+    RunOrder=3
+	Msgbox(RunOrder,"追蹤執行順序")
+End Sub
+
+Sub Button1_Click
+	StartActivity(Second)
+End Sub

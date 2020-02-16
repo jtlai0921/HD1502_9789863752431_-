@@ -1,0 +1,75 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=b4a.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=3
+Library1=core
+Library2=httputils2
+Library3=json
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 紫外線即時監測資料JSON
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	Dim MyHttpJob As HttpJob  '使用HTTP函式庫可以在網路上交換資料。
+	Dim JSON As JSONParser    'JSONParser物件是用來剖析JSON資料(類似XML)
+	Dim OpenDataUrl As String
+	OpenDataUrl = "http://opendata.epa.gov.tw/ws/Data/UV/?format=json"
+End Sub
+
+Sub Globals
+	Dim Label1 As Label
+	Dim ListView1 As ListView
+	Dim ArrayRows As List            'ArrayRows視為陣列
+	Dim Key_Value As Map             'Key_Value視為成對的(key和Value)
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")
+	Activity.Title ="紫外線即時監測資料JSON"
+	MyHttpJob.Initialize("JSON", Me)
+	MyHttpJob.Download(OpenDataUrl)
+End Sub
+
+Sub Display_UVI  '定義「顯示各縣市的紫外線指數」之副程式
+    ArrayRows = JSON.NextArray()     '將取得的JSON資料剖析成List串列(亦即資料列)
+	For i = 0 To ArrayRows.Size - 1  '顯示全部的記錄（資料列）
+		Key_Value = ArrayRows.Get(i) '取得每一筆記錄
+		ListView1.AddTwoLines(Key_Value.Get("County"),"紫外線指數：" & Key_Value.Get("UVI")) '顯示記錄的中的「country」與「UVI」欄位值
+	Next
+End Sub
+'當MyHttpJob.Download(OpenDataUrl)下載完成時，它會自動觸發JobDone事件
+Sub JobDone(job As HttpJob)
+	If job.Success Then 
+		ToastMessageShow("資料載入完成!!", True)
+		JSON.Initialize(job.GetString)
+		Display_UVI  '呼叫「顯示各縣市的紫外線指數」之副程式
+	Else
+		Msgbox(job.ErrorMessage, "Error")
+	End If
+End Sub
+
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub

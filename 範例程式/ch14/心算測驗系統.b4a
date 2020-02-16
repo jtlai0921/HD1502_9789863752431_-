@@ -1,0 +1,86 @@
+﻿Version=3
+IconFile=
+NumberOfModules=3
+Module1=MathTest
+ModuleVisible1=1
+Module2=UserLogin
+ModuleVisible2=1
+Module3=ScoreList
+ModuleVisible3=1
+Package=Leech.myebook.ch15.hw1
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=12
+File1=course.png
+File2=Main.bal
+File3=MathTest.bal
+File4=MyMathScoreDB.sqlite
+File5=Pass1.jpg
+File6=Pass2.jpg
+File7=Pass3.jpg
+File8=Pass4.jpg
+File9=Pass5.jpg
+File10=ScoreList.bal
+File11=userlogin.bal
+File12=UserLogin1.png
+NumberOfLibraries=2
+Library1=core
+Library2=sql
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 心算測驗(5關遊戲)V1.1
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+End Sub
+
+Sub Globals
+	Dim btnExitApp As Button     '使用者登入
+	Dim btnUserLogin As Button   '離開本系統
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'使用File.DirDefaultExternal
+	'SQLite資料庫會儲存到「SD卡」的根目錄/Android/data/<您專案的Package Name>/files/
+	'設定「Package Name」的步驟：B4A上方選擇Project／Package Name/com.Myebook.db
+	If File.Exists(File.DirDefaultExternal, "MyMathScoreDB.sqlite") = False Then  '判斷「SD卡」是否存在資料庫檔案，如果沒有，則
+       File.Copy(File.DirAssets, "MyMathScoreDB.sqlite", File.DirDefaultExternal,"MyMathScoreDB.sqlite")  '從Files頁籤中的資料庫檔案複製到「SD卡」中
+    End If
+	Activity.LoadLayout("Main")  '使用Main版面配置檔
+    Activity.Title="心算測驗(5關遊戲)V1.1"
+End Sub
+Sub btnUserLogin_Click
+	StartActivity(UserLogin)  '使用者登入介面
+End Sub
+
+Sub btnExitApp_Click
+	Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "心算測驗系統APP", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+    If Msg_Value = DialogResponse.POSITIVE Then
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If	
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+
+
+

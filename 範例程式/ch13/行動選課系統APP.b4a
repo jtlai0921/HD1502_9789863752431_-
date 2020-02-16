@@ -1,0 +1,116 @@
+﻿Version=3
+IconFile=
+NumberOfModules=6
+Module1=Department
+ModuleVisible1=1
+Module2=Course
+ModuleVisible2=1
+Module3=Student
+ModuleVisible3=1
+Module4=Course_Selection
+ModuleVisible4=1
+Module5=Query
+ModuleVisible5=1
+Module6=WriteSQL
+ModuleVisible6=1
+Package=Leech.myebook.ch16.Project
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=13
+File1=Course.bal
+File2=course_home.bal
+File3=Course_Selection.bal
+File4=course_selection_home.bal
+File5=Department.bal
+File6=department_home.bal
+File7=Main.bal
+File8=MyeSchoolDB.sqlite
+File9=Query.bal
+File10=query_home.bal
+File11=Student.bal
+File12=student_home.bal
+File13=WriteSQL.bal
+NumberOfLibraries=2
+Library1=core
+Library2=sql
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel:行動選課系統App
+	#VersionCode: 1
+	#VersionName: 2014032701
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+
+End Sub
+
+Sub Globals
+	Dim TabHost1 As TabHost
+	Dim btnCallQuery As Button
+	Dim btnCallCourse_Selection As Button
+	Dim btnCallCourse As Button
+	Dim btnCallDepartment As Button
+	Dim btnCallStudent As Button
+	Dim btnExitApp As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'使用File.DirDefaultExternal
+	'SQLite資料庫會儲存到「SD卡」的根目錄/Android/data/<您專案的Package Name>/files/
+	'設定「Package Name」的步驟：B4A上方選擇Project／Package Name/com.Myebook.db
+	
+	'判斷「SD卡」是否存在資料庫檔案，如果沒有，則
+	If File.Exists(File.DirDefaultExternal, "MyeSchoolDB.sqlite") = False Then  
+	   '從Files頁籤中的資料庫檔案複製到「SD卡」中
+       File.Copy(File.DirAssets, "MyeSchoolDB.sqlite",File.DirDefaultExternal, "MyeSchoolDB.sqlite")  
+    End If
+	Activity.LoadLayout("Main")          '使用「Main(版面配置檔)」來輸出
+    Activity.Title ="行動選課系統App"    '本頁的標題名稱
+	TabHost1.AddTab("科系管理","Department_home") '載入切換「科系管理」頁面時的版面。
+	TabHost1.AddTab("課程管理","Course_home")     '載入切換「課程管理」頁面時的版面。
+	TabHost1.AddTab("學生管理","Student_home")    '載入切換「學生管理」頁面時的版面。
+	TabHost1.AddTab("選課作業","Course_Selection_home")   '載入切換「選課作業」頁面時的版面。
+	TabHost1.AddTab("查詢作業","Query_home")      '載入切換「查詢作業」頁面時的版面。
+End Sub
+
+Sub btnCallDepartment_Click 
+   StartActivity(Department)         '啟動「科系管理系統」	
+End Sub
+Sub btnCallCourse_Click
+   StartActivity(Course)             '啟動「課程管理系統」
+End Sub
+Sub btnCallStudent_Click 
+   StartActivity(Student)            '啟動「學生管理系統」
+End Sub
+Sub btnCallCourse_Selection_Click
+   StartActivity(Course_Selection)   '啟動「選課作業系統」
+End Sub
+Sub btnCallQuery_Click
+   StartActivity(Query)              '啟動「查詢作業系統」
+End Sub
+
+Sub btnExitApp_Click
+	Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "行動選課系統APP", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+    If Msg_Value = DialogResponse.POSITIVE Then'
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If	
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub

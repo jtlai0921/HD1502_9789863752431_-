@@ -1,0 +1,93 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch03.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 撰寫「邏輯運算子」的程式
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim lblNum1 As Label
+	Dim lblNum2 As Label
+	Dim lblOp1 As Label
+	Dim lblOp2 As Label
+	Dim lblResult As Label
+	Dim btnAnd As Button
+	Dim btnOr As Button
+	Dim btnNot As Button
+	Dim Result As String 
+	Dim A,B As Int
+	A=5:B=15 
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+     Activity.LoadLayout("Main")
+     Activity.Title="撰寫「邏輯運算子」的程式"
+	 lblNum1.Text =A
+	 lblNum2.Text =B
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+Sub  btnAnd_Click
+    If A=5 AND B=10 Then  '判斷兩個條件式是否同時成立
+	   Result="真"
+	Else
+	   Result="假"
+	End If
+	lblOp1.Text ="="
+	lblOp2.Text ="<>"
+	lblResult.Text =Result
+End Sub
+
+Sub btnOr_Click
+    If A=5 OR B=10 Then   '判斷兩個條件式是否至少一個成立
+	   Result="真"
+	Else
+	   Result="假"
+	End If
+	lblOp1.Text ="="
+	lblOp2.Text ="<>"
+	lblResult.Text =Result
+End Sub
+
+Sub btnNot_Click
+    If Not(A=5) Then   '判斷A必為假
+	   Result="真"
+	Else
+	   Result="假"
+	End If
+	lblOp1.Text ="="
+	lblOp2.Text =""
+	lblResult.Text =Result
+End Sub
+

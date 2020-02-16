@@ -1,0 +1,74 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch11.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 狀態列通知
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+    Dim btnRun As Button
+	Dim edtScore As EditText
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="狀態列通知"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun_Click      
+If edtScore.Text="" Then
+   Msgbox("您尚未輸入成績哦!","產生錯誤...")
+Else
+  Dim Score As Int
+  Dim info As Notification
+  info.Initialize()   ' 建立Notification物件
+  Score = edtScore.Text
+  If  Score >= 80 AND Score <= 100 Then
+        info.Icon = "pass1"  ' 指定圖示
+        info.SetInfo("公佈結果", "優等生!...", Null)
+        info.Notify(1)      ' 顯示通知
+  Else If  Score >= 60 AND Score < 80 Then
+        info.Icon = "pass2"  ' 指定圖示
+        info.SetInfo("公佈結果", "及格!...", Null)
+        info.Notify(1)      ' 顯示通知		
+  Else
+        info.Icon = "nopass"  ' 指定圖示
+        info.SetInfo("公佈結果", "不及格!...", Null)
+        info.Notify(1)      ' 顯示通知
+  End If
+End If
+End Sub
+

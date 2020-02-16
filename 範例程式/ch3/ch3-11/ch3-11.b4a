@@ -1,0 +1,92 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch12.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 多版本訂書折扣
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim edtNum1 As EditText
+	Dim edtNum2 As EditText
+	Dim lblResult As Label
+	Dim btnRun As Button
+	Dim chkBook1 As CheckBox
+	Dim chkBook2 As CheckBox
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'Do not forget to load the layout file created with the visual designer. For example:
+	Activity.LoadLayout("Main")
+    Activity.Title ="多版本訂書折扣"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun_Click
+ Dim Number1,Number2,Sum,Total As Int
+ Dim DisCount As Float          '折扣率
+ Dim Book1_Value As Int = 500   '精裝版定價
+ Dim Book2_Value As Int = 400   '一般版定價
+If chkBook1.Checked = True AND chkBook2.Checked = True Then    '精裝本+平裝本
+   Number1 = edtNum1.Text
+   Number2 = edtNum2.Text
+   Sum=Number1+Number2 
+Else If chkBook1.Checked = True  Then  '精裝本                           
+   Number1 = edtNum1.Text
+   Sum=Number1
+Else If chkBook2.Checked = True Then   '平裝本
+   Number2 = edtNum2.Text
+   Sum=Number2 
+End If
+ If Sum>=1 AND Sum<=5 Then
+    DisCount = 1                    '1至5本書不打折扣
+ Else If Sum>=6 AND Sum<=10 Then
+    DisCount = 0.9                  '6至10本書打9折
+ Else If Sum>=11 AND Sum<=30 Then
+    DisCount = 0.85                  '11至30本書打85折
+ Else If Sum>=31 AND Sum<=50 Then
+    DisCount = 0.8                  '31至50本書打8折	
+ Else If Sum>=50 Then
+    DisCount = 0.7                  '50本書以上打7折
+ End If	
+	 
+If chkBook1.Checked = True AND chkBook2.Checked = True Then         '精裝本+平裝本
+   Total = DisCount *(Book1_Value*Number1+Book2_Value*Number2)    
+Else If chkBook1.Checked = True  Then                               '精裝本                          
+   Total = DisCount *(Book1_Value*Number1) 
+Else If  chkBook2.Checked = True Then                               '平裝本
+   Total = DisCount *(Book2_Value*Number2) 
+End If
+lblResult.Text = Total
+End Sub

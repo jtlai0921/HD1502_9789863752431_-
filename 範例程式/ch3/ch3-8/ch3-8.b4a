@@ -1,0 +1,84 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch12.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 開關式核取物件(ToggleButton)
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim lblResult As Label
+	Dim btnRun As Button
+	Dim ToggleButton1 As ToggleButton
+	Dim CF As Boolean 
+	Dim Label1 As Label
+	Dim Label2 As Label
+	CF=False
+	Dim edtCF As EditText
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="開關式核取物件(ToggleButton)"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun_Click
+  Dim C As Float
+  Dim F As Float 
+  If CF=True Then
+    F=edtCF.Text             '華氏F
+    C=(F-32)*5/9            '計算結果
+    lblResult.Text =C
+  Else
+    C=edtCF.Text             '攝氏C
+    F=C*9/5+32              '計算結果
+    lblResult.Text =F
+  End If
+End Sub
+Sub ToggleButton1_CheckedChange(Checked As Boolean)
+	If Checked Then
+	   CF=True
+	   Label1.text="輸入華氏F"
+	   edtCF.Hint="輸入華氏F"
+	   Label2.text="輸出攝氏C"
+	   btnRun.Text ="轉成攝氏"
+	Else
+	   CF=False
+	   Label1.text="輸入攝氏C"
+	   edtCF.Hint="輸入攝氏C"
+	   Label2.text="輸出華氏F"
+	   btnRun.Text ="轉成華氏"
+	End If
+End Sub

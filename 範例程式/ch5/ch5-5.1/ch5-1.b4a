@@ -1,0 +1,72 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch05.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 單一選擇結構的兩種寫法
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim edtScore As EditText
+	Dim lblResult As Label
+	Dim btnRun1 As Button
+	Dim btnRun2 As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="單一選擇結構的兩種寫法"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun1_Click        '第一種寫法
+If edtScore.Text="" Then
+   Msgbox("您尚未輸入成績哦!","產生錯誤...")
+Else
+  Dim Score As Int
+  Score = edtScore.Text
+  If  Score >= 60 Then lblResult.Text ="通過1"
+End If
+End Sub
+Sub btnRun2_Click        '第二種寫法
+If edtScore.Text="" Then
+   Msgbox("您尚未輸入成績哦!","產生錯誤...")
+Else
+  Dim Score As Int 
+  Score = edtScore.Text
+  If  Score >= 60 Then
+     lblResult.Text ="通過2"
+  End If
+End If
+End Sub

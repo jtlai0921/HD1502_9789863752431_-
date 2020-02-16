@@ -1,0 +1,71 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch06.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 第五章  選擇結構
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim lblResult As Label
+	Dim btnRun As Button
+	Dim edtNumber As EditText
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="九九乘法表"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun_Click
+If edtNumber.Text=""  Then
+   Msgbox("您尚未輸入數值資料哦!","產生錯誤...")
+Else
+  Dim Number As Int
+  Dim Temp As String 
+  Number =edtNumber.Text
+  For i = 1 To Number           '外迴圈
+     For j = 1 To Number        '內迴圈
+	  If (i * j > 9) Then
+         Temp = Temp & i & "*" & j & "=" & (i*j) & "　"
+      Else
+         Temp = Temp & i & "*" & j & "=" & "  " & (i*j) & "　"
+      End If
+     Next 
+     Temp = Temp & CRLF      '換行
+  Next 
+  lblResult.Text=Temp
+End If
+End Sub

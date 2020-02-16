@@ -1,0 +1,76 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch05.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 成績分等第(If/Then/Else If)
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim lblResult As Label
+	Dim btnRun As Button
+	Dim edtChi_Score As EditText
+	Dim edtEng_Score As EditText
+	Dim lblAver As Label
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="成績分等第(If/Then/Else If)"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun_Click
+If edtChi_Score.Text="" OR edtEng_Score.Text=""  Then
+   Msgbox("您尚未輸入成績哦!","產生錯誤...")
+Else
+  Dim Chi_Score , Eng_Score As Int
+  Dim Aver As Float 
+  Chi_Score=edtChi_Score.Text       '國文成績
+  Eng_Score =edtEng_Score.Text      '英文成績
+  Aver=( Chi_Score + Eng_Score )/2  '計算平均成績
+  lblAver.Text =Aver
+  If Aver >= 90 AND Aver <= 100 Then
+     lblResult.Text = "A等"
+  Else If Aver >= 80 AND Aver < 90 Then
+     lblResult.Text = "B等"
+  Else If Aver >= 70 AND Aver < 80 Then
+     lblResult.Text = "C等"
+  Else If Aver >= 60 AND Aver < 70 Then
+     lblResult.Text = "D等"
+  Else If Aver < 60 Then
+     lblResult.Text = "E等"
+  End If
+End If
+End Sub

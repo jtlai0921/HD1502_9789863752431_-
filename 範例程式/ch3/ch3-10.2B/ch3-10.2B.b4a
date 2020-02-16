@@ -1,0 +1,74 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch12.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 清單選項物件(ListView)
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim lblResult As Label
+	Dim livSubject As ListView
+	Dim Subject_Name As String 
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="清單選項物件(ListView)"
+   Dim PicBook1,PicBook2,PicBook3,PicBook4,PicBook5 As Bitmap 
+   '第一種寫法
+ '  PicBook1.Initialize(File.DirAssets,"book1.jpg")
+ '  PicBook2.Initialize(File.DirAssets,"book2.jpg")
+ '  PicBook3.Initialize(File.DirAssets,"book3.jpg")
+ '  PicBook4.Initialize(File.DirAssets,"book4.jpg")
+ '  PicBook5.Initialize(File.DirAssets,"book5.jpg")
+   '第二種寫法
+   PicBook1=LoadBitmap(File.DirAssets,"book1.jpg")
+   PicBook2=LoadBitmap(File.DirAssets,"book2.jpg")
+   PicBook3=LoadBitmap(File.DirAssets,"book3.jpg")
+   PicBook4=LoadBitmap(File.DirAssets,"book4.jpg")
+   PicBook5=LoadBitmap(File.DirAssets,"book5.jpg")
+   livSubject.AddTwoLinesAndBitmap2("程式設計","李春雄",PicBook1,"Book01")
+   livSubject.AddTwoLinesAndBitmap2("資料庫系統","李春雄",PicBook2,"Book02")   
+   livSubject.AddTwoLinesAndBitmap2("資料結構","李春雄",PicBook3,"Book03")     
+   livSubject.AddTwoLinesAndBitmap2("計算機概論","李春雄",PicBook4,"Book04")
+   livSubject.AddTwoLinesAndBitmap2("數位學習","李春雄",PicBook5,"Book05") 
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub livSubject_ItemClick (Position As Int, Value As Object)
+  Dim Temp As String
+  Temp = "你剛才點選的科目為：" & Value     
+  lblResult.Text =Temp
+End Sub

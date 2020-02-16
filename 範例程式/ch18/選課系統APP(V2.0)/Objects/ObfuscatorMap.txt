@@ -1,0 +1,18 @@
+This file maps the renamed variables to the original ones.
+v5=sqlcmd
+v6=cursordbpoint
+v7=yoursql
+v0=course
+vv1=department
+vv2=query
+vv3=student
+vv4=writesql
+vv5=querydblist
+vv6=main
+vv7=strsqlviewtitle
+vv0=strline
+vvv1=strsqlviewcontent
+vvv2=deptno
+vvv3=strviewaddcourse
+vvv4=strsql
+vvv5=j

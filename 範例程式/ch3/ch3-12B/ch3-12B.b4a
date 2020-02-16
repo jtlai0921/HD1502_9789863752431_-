@@ -1,0 +1,109 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch12.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=4
+File1=Main.bal
+File2=Myebook_WebView.bal
+File3=Page1.bal
+File4=Page2.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel:資訊系統(整合多個表單)
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+
+End Sub
+
+Sub Globals
+	Dim TabHost1 As TabHost
+	Dim lblResult As Label
+	Dim spnSubject As Spinner
+	Dim livSubject As ListView
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")
+    Activity.Title ="資訊系統(整合多個表單)"
+	Activity.AddMenuItem("設計者：李春雄老師", "AboutApp")
+	Activity.AddMenuItem("結束", "ExitApp")
+	TabHost1.AddTab("下拉式(Spinner)","Page1")
+	TabHost1.AddTab("清單選項(ListView)","Page2")
+	spnSubject.Add("程式設計")
+    spnSubject.Add("資料庫系統")   
+    spnSubject.Add("資料結構")   
+    spnSubject.Add("計算機概論")
+	spnSubject.Add("數位學習")
+	Dim PicBook1,PicBook2,PicBook3,PicBook4,PicBook5 As Bitmap 
+	PicBook1=LoadBitmap(File.DirAssets,"book1.jpg")
+    PicBook2=LoadBitmap(File.DirAssets,"book2.jpg")
+    PicBook3=LoadBitmap(File.DirAssets,"book3.jpg")
+    PicBook4=LoadBitmap(File.DirAssets,"book4.jpg")
+    PicBook5=LoadBitmap(File.DirAssets,"book5.jpg")
+    livSubject.AddTwoLinesAndBitmap("程式設計","6",PicBook1)
+    livSubject.AddTwoLinesAndBitmap("資料庫系統","5",PicBook2)   
+    livSubject.AddTwoLinesAndBitmap("資料結構","3",PicBook3)     
+    livSubject.AddTwoLinesAndBitmap("計算機概論","4",PicBook4)
+    livSubject.AddTwoLinesAndBitmap("數位學習","3",PicBook5) 
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+Sub spnSubject_ItemClick (Position As Int, Value As Object)
+  Dim Temp As String
+  Temp = "你喜歡的科目為：" & spnSubject.SelectedItem  
+  Msgbox(Temp,"訊息回覆")
+End Sub
+
+Sub livSubject_ItemClick (Position As Int, Value As Object)
+  Dim Temp As String 
+  Dim BookName As String 
+  Dim CreditNum As String 
+  BookName = Value  ' 書籍名稱
+    Select Position      ' 取得學分數
+       Case 0: CreditNum = 6
+       Case 1: CreditNum = 5	   
+       Case 2: CreditNum = 3	   
+       Case 3: CreditNum = 4   
+	   Case 4: CreditNum = 3
+    End Select  
+  Temp= "你點選科目："  & CRLF &  "「"  & BookName & "」學分數為：" & CreditNum   
+  lblResult.Text =Temp
+End Sub
+
+Sub AboutApp_Click
+ Dim About As String 
+ About="題目：資訊系統(整合多個表單)" & CRLF & "設計者：李春雄老師"
+ Msgbox(About, "關於本系統")
+End Sub
+
+Sub ExitApp_Click
+    Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "資訊系統APP", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+    If Msg_Value = DialogResponse.POSITIVE Then
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If
+End Sub
+

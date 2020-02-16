@@ -1,0 +1,112 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=b4a.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=3
+Library1=core
+Library2=httputils2
+Library3=json
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 紫外線即時監測資料
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	Dim MyHttpJob As HttpJob  '使用HTTP函式庫可以在網路上交換資料。
+	Dim JSON As JSONParser    'JSONParser物件是用來剖析JSON資料(類似XML)
+	Dim OpenDataUrl As String
+	OpenDataUrl = "http://opendata.epa.gov.tw/ws/Data/UV/?format=json"
+End Sub
+
+Sub Globals
+	Dim Spinner_Country As Spinner
+	Dim ArrayRows As List            'ArrayRows視為陣列
+	Dim Key_Value As Map             'Key_Value視為成對的(key和Value)
+	Dim Label_Country As Label
+	Dim Label_PublishAgency As Label
+	Dim Label_PublishTime As Label
+	Dim Label_SiteName As Label
+	Dim Label_Title As Label
+	Dim Label_TWD97Lat As Label
+	Dim Label_TWD97Lon As Label
+	Dim Label_UVI As Label
+	Dim Label_ResultTitle As Label
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")
+	Activity.Title ="紫外線即時監測資料JSON"
+	MyHttpJob.Initialize("JSON", Me)
+	MyHttpJob.Download(OpenDataUrl)
+	Spinner_Country.Add("請選擇縣市")
+	Label_ResultTitle.Text=""
+End Sub
+
+Sub Display_UVI  '定義「顯示各縣市的紫外線指數」之副程式
+    ArrayRows = JSON.NextArray()      '將取得的JSON資料剖析成List串列(亦即資料列)
+	For i = 0 To ArrayRows.Size - 1   '從資料列再分割成許多欄位值
+		Key_Value = ArrayRows.Get(i)
+		Spinner_Country.Add(Key_Value.Get("County"))
+	Next
+End Sub
+
+Sub Clear_UVIData  '定義「清除各縣市的紫外線指數」之副程式
+	Label_UVI.Text= ""
+	Label_Country.Text= ""
+	Label_PublishTime.Text= ""
+	Label_PublishAgency.Text=  ""
+	Label_SiteName.Text=  ""
+	Label_TWD97Lat.Text=  ""
+	Label_TWD97Lon.Text=  ""
+End Sub
+Sub JobDone(job As HttpJob)
+	If job.Success Then
+		ToastMessageShow("資料載入完成!!", True)
+		JSON.Initialize(job.GetString)
+		Display_UVI  '呼叫「顯示各縣市的紫外線指數」之副程式
+	Else
+		Msgbox(job.ErrorMessage, "Error")
+	End If
+End Sub
+
+
+Sub Spinner_Country_ItemClick (Position As Int, Value As Object)
+	For i = 0 To ArrayRows.Size - 1
+		Key_Value = ArrayRows.Get(i)
+		If Spinner_Country.SelectedItem = Key_Value.Get("County") Then
+			Label_ResultTitle.Text="[" & Key_Value.Get("County") & "] 查詢結果"
+			Label_UVI.Text= "UVI:" & Key_Value.Get("UVI")
+			Label_Country.Text= "縣市:" & Key_Value.Get("County")
+			Label_PublishTime.Text= "發布時間:" & Key_Value.Get("PublishTime")
+			Label_PublishAgency.Text= "發布機關:" & Key_Value.Get("PublishAgency")
+			Label_SiteName.Text= "測站名稱:" & Key_Value.Get("SiteName")
+			Label_TWD97Lat.Text= "緯度:" & Key_Value.Get("TWD97Lat")
+			Label_TWD97Lon.Text= "經度:" & Key_Value.Get("TWD97Lon")
+			i = ArrayRows.Size - 1
+		Else
+            Clear_UVIData  '呼叫「清除各縣市的紫外線指數」之副程式
+        End If	
+	Next
+End Sub
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub

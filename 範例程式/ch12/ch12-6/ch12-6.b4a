@@ -1,0 +1,79 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=b4a.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=3
+Library1=core
+Library2=httputils2
+Library3=xmlsax
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 紫外線即時監測資料XML
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	Dim MyHttpJob As HttpJob    '使用HTTP函式庫可以在網路上交換資料
+	Dim XMLParser As SaxParser	'SaxParser物件是用來剖析XML資料。
+	Dim OpenDataUrl As String   '宣告下載網址的字串變數
+	OpenDataUrl = "http://opendata.epa.gov.tw/ws/Data/UV/?format=xml"
+End Sub
+
+Sub Globals
+	Dim Label1 As Label
+	Dim ListView1 As ListView   '宣告ListView1變數，用來顯示「各縣市紫外線指數」內容
+	Dim Key_Value As Map        '宣告變數Key_Value視為成對的(key和Value)
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")	             '指定Main主程式使用Main.bal版面配置檔。
+    Activity.Title ="紫外線即時監測資料XML"  '設定「標題名稱」為“紫外線即時監測資料JSON”。
+	XMLParser.Initialize    'XMLParser物件初始化
+	Key_Value.Initialize    'Key_Value物件初始化
+	MyHttpJob.Initialize("XML", Me) '初始化
+	MyHttpJob.Download(OpenDataUrl) '下載xml網站資料
+End Sub
+
+Sub parser_EndElement (Uri As String, Name As String, Text As StringBuilder)
+    If Name="SiteName" Then
+		Key_Value.Put("SiteName", Text.ToString) '獲得資訊並轉成字串
+	Else If Name="UVI" Then
+		Key_Value.Put("UVI", Text.ToString)      '獲得資訊並轉成字串
+		ListView1.AddTwoLines(Key_Value.Get("SiteName"),"紫外線指數：" & Key_Value.Get("UVI"))'擷取Key_Value的特定資料並寫入到ListView1
+		Key_Value.Clear  '擷取Key_Value的特定資料清空
+	End If	
+End Sub
+
+Sub JobDone(job As HttpJob)
+	If job.Success Then '假如下載成功
+		ToastMessageShow("資料載入完成!!", True)       '顯示資料載入完成!!
+		XMLParser.Parse(job.GetInputStream, "Parser")  '讀取並解析下載的XML資源
+	Else
+		Msgbox(job.ErrorMessage, "Error") '顯示Error
+	End If
+End Sub
+
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+

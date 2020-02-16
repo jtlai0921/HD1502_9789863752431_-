@@ -1,0 +1,93 @@
+﻿Version=3
+IconFile=
+NumberOfModules=1
+Module1=MyFunction
+ModuleVisible1=1
+Package=Leech.myebook.ch09.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 動態投擲骰子
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+    Dim btnRun As Button
+	Dim lblResult As Label
+	Dim edtNumber As EditText
+	Dim pic1 As ImageView
+    Dim pic2 As ImageView
+    Dim pic3 As ImageView
+    Dim pic4 As ImageView
+    Dim pic5 As ImageView
+    Dim pic6 As ImageView
+	Dim arrImgView() As ImageView
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="動態投擲骰子"
+   ' 建立ImageView陣列
+    arrImgView = Array As ImageView(pic1, pic2, pic3, pic4, pic5, pic6)
+	LoadPicture  ' 呼叫載入圖片副程式
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+Sub LoadPicture()  '載入圖片副程式
+    For i = 1 To 6
+        Dim PicDB As BitmapDrawable
+        PicDB.Initialize(LoadBitmap(File.DirAssets, "G_" & i & ".bmp"))
+        arrImgView(i-1).Background = PicDB  ' 載入圖片
+    Next
+End Sub
+Sub btnRun_Click   
+If edtNumber.Text="" Then
+   Msgbox("您尚未輸入投擲骰子次數哦!","產生錯誤...")
+Else
+  Dim A(7) As Int
+  Dim i, j, x,n As Int
+  Dim temp As String 
+  n=edtNumber.Text 
+  For i = 1 To n
+     x = Rnd(1,7)
+	arrImgView(x-1).Visible = True  '顯示圖片
+	MyFunction.Delay(100)           '停止0.1秒
+	arrImgView(x-1).Visible = False '隱藏圖片
+     A(x-1) = A(x-1) + 1
+  Next 
+  arrImgView(x-1).Visible = True   '顯示最後一張圖片
+  temp="您投擲骰子 " & n & " 次" & CRLF
+  temp = temp & "================" & CRLF
+  For j = 0 To 5
+    temp = temp & (j+1) & "點" & "    " & A(j) & "次" & CRLF
+  Next 
+  lblResult.Text=temp 
+End If
+End Sub

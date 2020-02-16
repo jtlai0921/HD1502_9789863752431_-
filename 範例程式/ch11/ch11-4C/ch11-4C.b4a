@@ -1,0 +1,158 @@
+﻿Version=3
+IconFile=
+NumberOfModules=4
+Module1=HttpUtils
+ModuleVisible1=1
+Module2=HttpUtilsService
+ModuleVisible2=1
+Module3=Myebook
+ModuleVisible3=1
+Module4=BookStore
+ModuleVisible4=1
+Package=Leechphd.myebook.B4AtoSQLServer2
+DoNotOverwriteManifest=False
+ManifestCode=
+UserTypesHint=
+NumberOfFiles=4
+File1=BookStore.bal
+File2=Main.bal
+File3=Myebook.bal
+File4=MyeBookDB.sqlite
+NumberOfLibraries=4
+Library1=core
+Library2=http
+Library3=json
+Library4=sql
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: B4A連結SQL_Server(自動更新SQLite)
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+    Dim SQLCmd As SQL                '宣告SQL物件
+    Dim Password As String           '宣告使用者密碼
+    Dim DNS1,DNS2 As String          '宣告兩個領域名稱 
+    Dim ServerUrl As String          '宣告Web Service的網址
+	'測試是否php的程式是否可以讀取資料庫
+	DNS1 = "http://120.118.165.192:81/B4ASQL/b4asql-1.php?sqlre=Select * from Member"
+	DNS2 = "http://120.118.165.192:81/B4ASQL/b4asql-1.php?sqlre=Select * from Myebook"
+	ServerUrl = "http://120.118.165.192:81/B4ASQL/b4asql.php"
+End Sub
+
+Sub Globals
+    Dim Label1 As Label             'B4A讀取SQL Server資料(檢查會員身份)
+	Dim edtPassword As EditText     '輸入使用者密碼
+	Dim btnLogin As Button          '檢查會員身份
+	Dim btnModelone As Button       '遠端DB(會員)
+	Dim btnModeltwo As Button       '遠端DB(書籍)
+	Dim btnBookManager As Button    '書籍資料管理
+	Dim StrSQL As String            '撰寫SQL指令
+	Dim btnExitApp As Button        '離開本系統
+	Dim JSON As JSONParser          'JSONParser物件是用來剖析JSON資料(類似XML)
+	Dim response As String          '取得Web Service的回覆
+	Dim btnUpdateSQLite As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	If File.Exists(File.DirDefaultExternal, "MyeBookDB.sqlite") = False Then  
+	   '從Files頁籤中的資料庫檔案複製到「SD卡」中
+       File.Copy(File.DirAssets, "MyeBookDB.sqlite",File.DirDefaultExternal, "MyeBookDB.sqlite")  
+    End If
+	If SQLCmd.IsInitialized() = False Then  '判斷SQL物件是否已經初始化，如果沒有，則
+       SQLCmd.Initialize(File.DirDefaultExternal, "MyeBookDB.sqlite", True) '將SQL物件初始化資料庫
+    End If	
+	Activity.LoadLayout("Main")
+    Activity.Title ="B4A連結MySQL(手動更新SQLite)"    '本頁的標題名稱
+	If FirstTime Then
+		HttpUtils.CallbackActivity = "Myebook"
+		HttpUtils.CallbackJobDoneSub = "JobDone"
+	End If
+    StrSQL="select * from Myebook"
+	'ServerUrl代表網站中Web Service的網址，StrSQL是指對此Web Service查詢的指令
+    HttpUtils.PostString("LeechJob", ServerUrl, StrSQL)  
+End Sub
+Sub btnUpdateSQLite_Click '更新SQLite
+    '如果向Web Service提出的要求成功(亦即連接到遠端伺服器主機)
+	If HttpUtils.Complete = True Then 
+	   JobDone(HttpUtils.Job) '呼叫JobDone副程式
+	End If	
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+	
+End Sub
+
+Sub JobDone (Job As String)
+	If HttpUtils.IsSuccess(ServerUrl) Then   
+		response = HttpUtils.GetString(ServerUrl) '取得Web Service的回覆
+		JSON.Initialize(response)  '用來剖析「Web Service的回覆」資料格式內容
+	End If
+	Delete_Myebook  '呼叫刪除本機端的電子書
+	Update_Myebook  '呼叫新增遠端匯入的最新電子書
+End Sub
+
+Sub Delete_Myebook() '刪除本機端的電子書
+   Dim StrSQL As String
+   StrSQL = "DELETE FROM 書籍資料表"  '撰寫刪除「書籍資料表」的SQL指令
+   SQLCmd.ExecNonQuery(StrSQL)        '執行SQL指令
+End Sub
+
+Sub Update_Myebook() '新增遠端匯入的最新電子書
+  Dim StrSQL As String
+  Dim ArrayRows As List            'ArrayRows視為陣列
+  Dim Key_Value As Map             'Key_Value視為成對的(key和Value)
+  ArrayRows = JSON.NextArray()     '將取得的JSON資料剖析成List串列(亦即資料列)
+  For i = 0 To  ArrayRows.Size - 1  '從資料列再分割成許多欄位值
+	  Key_Value =  ArrayRows.Get(i)
+      StrSQL = "INSERT INTO 書籍資料表(書號,書名) VALUES('" & Key_Value.Get("Book_No") & "','" & Key_Value.Get("Book_Name") & "')"
+	  SQLCmd.ExecNonQuery(StrSQL)           '執行SQL指令，以成功的新增記錄
+  Next
+  ToastMessageShow("您更新電子書!", True)   '顯示新增成功狀態
+End Sub
+
+Sub btnLogin_Click
+ If edtPassword.Text="" Then  
+    Msgbox("您尚未填入密碼","錯誤訊息")
+ Else
+    Password = edtPassword.Text
+    StartActivity(Myebook)
+ End If
+End Sub
+
+Sub btnModelone_Click '瀏覽遠端SQL Server資料庫(會員)
+	Dim i As Intent
+    i.Initialize(i.ACTION_VIEW, DNS1)
+    StartActivity(i)
+End Sub
+Sub btnModeltwo_Click '瀏覽遠端SQL Server資料庫(書籍)
+	Dim i As Intent
+    i.Initialize(i.ACTION_VIEW, DNS2)
+    StartActivity(i)
+End Sub
+Sub btnBookManager_Click
+	StartActivity(BookStore)
+End Sub
+
+Sub btnExitApp_Click
+	Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "行動電子書系統APP", "確認", "", "取消", Null)
+    If Msg_Value = DialogResponse.POSITIVE Then
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If	
+End Sub
+

@@ -1,0 +1,102 @@
+﻿Version=3
+IconFile=
+NumberOfModules=4
+Module1=Mobile_Survey
+ModuleVisible1=1
+Module2=Student
+ModuleVisible2=1
+Module3=Query
+ModuleVisible3=1
+Module4=Survey
+ModuleVisible4=1
+Package=Leech.myebook.ch15.hw2
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=10
+File1=Main.bal
+File2=Mobile_Survey.bal
+File3=Mobile_Survey_home.bal
+File4=MyeSurveyDB.sqlite
+File5=Query.bal
+File6=query_home.bal
+File7=Student.bal
+File8=student_home.bal
+File9=Survey.bal
+File10=Survey_home.bal
+NumberOfLibraries=2
+Library1=core
+Library2=sql
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel:行動問卷管理系統
+	#VersionCode: 2
+	#VersionName: 2014032702
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+
+End Sub
+
+Sub Globals
+	Dim TabHost1 As TabHost
+	Dim btnCallSurvey As Button
+	Dim btnCallStudent As Button
+	Dim btnCallMobile_Survey As Button
+	Dim btnCallQuery As Button
+	Dim btnExitApp As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'使用File.DirDefaultExternal
+	'SQLite資料庫會儲存到「SD卡」的根目錄/Android/data/<您專案的Package Name>/files/
+	'設定「Package Name」的步驟：B4A上方選擇Project／Package Name/com.Myebook.db
+	If File.Exists(File.DirDefaultExternal, "MyeSurveyDB.sqlite") = False Then  '判斷「SD卡」是否存在資料庫檔案，如果沒有，則
+       File.Copy(File.DirAssets, "MyeSurveyDB.sqlite",File.DirDefaultExternal, "MyeSurveyDB.sqlite")  '從Files頁籤中的資料庫檔案複製到「SD卡」中
+    End If
+	Activity.LoadLayout("Main")
+    Activity.Title ="行動問卷管理系統"
+	TabHost1.AddTab("問卷管理","Survey_home")
+	TabHost1.AddTab("學生管理","Student_home")
+	TabHost1.AddTab("行動問卷","Mobile_Survey_home")
+	TabHost1.AddTab("統計問卷","Query_home")
+End Sub
+
+Sub btnCallSurvey_Click
+   StartActivity(Survey)             '問卷管理	
+End Sub
+Sub btnCallStudent_Click 
+   StartActivity(Student)            '學生管理
+End Sub
+Sub btnCallMobile_Survey_Click
+   StartActivity(Mobile_Survey)      '行動問卷
+End Sub
+Sub btnCallQuery_Click
+   StartActivity(Query)              '統計問卷
+End Sub
+
+Sub btnExitApp_Click
+	Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "行動問卷管理系統", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+    If Msg_Value = DialogResponse.POSITIVE Then'
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If	
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+

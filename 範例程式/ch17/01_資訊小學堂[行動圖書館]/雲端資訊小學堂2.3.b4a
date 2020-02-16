@@ -1,0 +1,166 @@
+﻿Version=3
+IconFile=
+NumberOfModules=19
+Module1=BookTable
+ModuleVisible1=1
+Module2=Myebook
+ModuleVisible2=1
+Module3=KeywordQuery
+ModuleVisible3=1
+Module4=BookClassQuery
+ModuleVisible4=1
+Module5=UserAPP
+ModuleVisible5=1
+Module6=ManagerAPP
+ModuleVisible6=1
+Module7=BooksManager
+ModuleVisible7=1
+Module8=BookStoreManager
+ModuleVisible8=1
+Module9=BookStoreTable
+ModuleVisible9=1
+Module10=BookClassManager
+ModuleVisible10=1
+Module11=BookClassTable
+ModuleVisible11=1
+Module12=UserLogin
+ModuleVisible12=1
+Module13=ManagerLogin
+ModuleVisible13=1
+Module14=MyloveBooks
+ModuleVisible14=1
+Module15=ReaderManager
+ModuleVisible15=1
+Module16=ReaderTable
+ModuleVisible16=1
+Module17=Charts
+ModuleVisible17=1
+Module18=DataAnalysis
+ModuleVisible18=1
+Module19=PieChart
+ModuleVisible19=1
+Package=tw.idv.myebook.project01
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=PieItem,PieData,GraphInternal,Graph,LinePoint,LineData,BarData
+NumberOfFiles=31
+File1=BookClassManager.bal
+File2=BookClassQuery.bal
+File3=BookClassTable.bal
+File4=BooksManager.bal
+File5=BookStoreManager.bal
+File6=BookStoreTable.bal
+File7=BookTable.bal
+File8=DataAnalysis.bal
+File9=KeywordQuery.bal
+File10=Main.bal
+File11=managerapp.bal
+File12=managerlogin.bal
+File13=ManagerLogin.bas
+File14=myebook.bal
+File15=MyebookDBS.sqlite
+File16=MyloveBooks.bal
+File17=PieChart.bal
+File18=Query_Class.bal
+File19=Query_DB.bal
+File20=Query_DS.bal
+File21=Query_EL.bal
+File22=Query_keyword.bal
+File23=Query_PC.bal
+File24=Query_PG.bal
+File25=Query_SA.bal
+File26=ReaderManager.bal
+File27=ReaderManager.bas
+File28=ReaderTable.bal
+File29=ReaderTable.bas
+File30=UserAPP.bal
+File31=UserLogin.bal
+NumberOfLibraries=2
+Library1=core
+Library2=sql
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel:  資訊小學堂[行動圖書館]
+	#VersionCode:5
+	#VersionName: 2014030401
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+
+End Sub
+
+Sub Globals
+	Dim btnUser As Button
+	Dim btnManager As Button
+	Dim btnExitAPP As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+    '設定SQLite資料庫儲存置位的三種方法：
+    '第一種：使用File.DirInternal/File.DirInternalCache
+    'SQLite資料庫會儲存到「手機內部的記憶體中」，如果沒有透過工具軟體是無法找到
+	
+	'第二種：使用DirRootExternal
+    'SQLite資料庫會儲存到「SD卡」的根目錄下
+   
+	'第三種：使用File.DirDefaultExternal
+	'SQLite資料庫會儲存到「SD卡」的根目錄/Android/data/<您專案的Package Name>/files/
+	'設定「Package Name」的步驟：B4A上方選擇Project／Package Name/com.Myebook.db
+	If File.Exists(File.DirDefaultExternal, "MyebookDBS.sqlite") = False Then
+        File.Copy(File.DirAssets, "MyebookDBS.sqlite",File.DirDefaultExternal, "MyebookDBS.sqlite")
+    End If
+	'優點：
+	'1.使用File.DirDefaultExternal的話就會自動放到Android/data/並且新增對應的Package Name資料夾
+    '2.當app移除的時候也會一起移除掉
+    Activity.LoadLayout("Main")
+    Activity.Title = "資訊小學堂[行動圖書館]"
+	Activity.AddMenuItem2("設計者：李春雄老師", "AboutApp",LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+	Activity.AddMenuItem2("結束", "ExitApp",LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause(UserClosed As Boolean)
+
+End Sub
+
+Sub btnUser_Click
+	StartActivity("UserLogin")	
+End Sub
+Sub btnManager_Click
+	StartActivity("ManagerLogin")	
+End Sub
+
+Sub btnExitAPP_Click
+	Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "資訊小學堂[行動圖書館]", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+    If Msg_Value = DialogResponse.POSITIVE Then
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If
+End Sub
+
+Sub AboutApp_Click
+ Dim About As String 
+ About="資訊小學堂[行動圖書館]" & CRLF & "設計者：李春雄老師"
+ Msgbox(About, "關於本系統")
+End Sub
+
+Sub ExitApp_Click
+    Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "資訊小學堂[行動圖書館]", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+    If Msg_Value = DialogResponse.POSITIVE Then
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If
+End Sub

@@ -1,0 +1,73 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch07.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 陣列的初值設定
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+    Dim btnRun1 As Button
+	Dim btnRun2 As Button
+	Dim lblResult As Label
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="陣列的初值設定"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun1_Click      
+  '宣告及初值設定
+   Dim A() As Int
+   A=Array As Int (60, 70, 80, 85, 90, 100)
+   Dim sum As Int = 0
+  '處理
+   sum = A(0) + A(1) + A(2) + A(3) + A(4) + A(5)
+  '輸出
+   lblResult.Text =sum
+End Sub
+Sub btnRun2_Click      
+  '宣告及初值設定
+   Dim A() As Int
+   A=Array As Int (60, 70, 80, 85, 90, 100)
+   Dim i=0,sum As Int = 0
+  '處理
+   For i = 0 To 5
+      sum = sum + A(i)
+   Next
+  '輸出
+   lblResult.Text =sum
+End Sub

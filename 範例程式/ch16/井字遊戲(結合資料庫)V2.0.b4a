@@ -1,0 +1,96 @@
+﻿Version=3
+IconFile=
+NumberOfModules=3
+Module1=Play1
+ModuleVisible1=1
+Module2=Play2
+ModuleVisible2=1
+Module3=ScoreList
+ModuleVisible3=1
+Package=Leech.myebook.PalyGame4
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=9
+File1=leech_icon.jpg
+File2=Main.bal
+File3=MyGameScore.sqlite
+File4=Play1.bal
+File5=Play1_home.bal
+File6=play2.bal
+File7=play2_home.bal
+File8=Score_home.bal
+File9=scorelist.bal
+NumberOfLibraries=2
+Library1=core
+Library2=sql
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel:井字遊戲(結合資料庫)V2.0
+	#VersionCode: 2
+	#VersionName: 2014041901
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+
+End Sub
+
+Sub Globals
+	Dim TabHost1 As TabHost
+	Dim btnCallPlay1 As Button
+	Dim btnCallPlay2 As Button
+	Dim btnExitApp As Button
+	Dim btnCallScoreList As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'使用File.DirDefaultExternal
+	'SQLite資料庫會儲存到「SD卡」的根目錄/Android/data/<您專案的Package Name>/files/
+	'設定「Package Name」的步驟：B4A上方選擇Project／Package Name/com.Myebook.db
+	'If File.Exists(File.DirDefaultExternal, "MyGameScore.sqlite") = False Then  '判斷「SD卡」是否存在資料庫檔案，如果沒有，則
+       File.Copy(File.DirAssets, "MyGameScore.sqlite", File.DirDefaultExternal,"MyGameScore.sqlite")  '從Files頁籤中的資料庫檔案複製到「SD卡」中
+    'End If
+	Activity.LoadLayout("Main")
+    Activity.Title ="井字遊戲(結合資料庫)V2.0"
+	TabHost1.AddTab("兩人對戰","Play1_home")
+	TabHost1.AddTab("電腦對戰","Play2_home")
+	TabHost1.AddTab("查詢戰況","Score_home")
+End Sub
+
+Sub btnCallPlay1_Click 
+   StartActivity(Play1)            '兩人對戰
+End Sub
+
+Sub btnCallPlay2_Click
+   StartActivity(Play2)            '與Android手機對戰
+End Sub
+
+Sub btnCallScoreList_Click
+   StartActivity(ScoreList)        '查詢戰況
+End Sub
+
+Sub btnExitApp_Click       '離開本系統
+	Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "井字遊戲App", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+    If Msg_Value = DialogResponse.POSITIVE Then'
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If	
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+

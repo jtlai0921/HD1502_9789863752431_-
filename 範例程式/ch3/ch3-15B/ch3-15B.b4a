@@ -1,0 +1,76 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch11.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 使用者螢幕物件
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim lblShowResult As Label
+	Dim Button1 As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")
+    Activity.Title ="使用者螢幕物件"
+	Activity.AddMenuItem("設計者：李春雄老師", "AboutApp")
+	Activity.AddMenuItem("結束", "ExitApp")
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+Sub Activity_Touch(Action As Int, X As Float, Y As Float)
+    Dim Temp As String  = "目前座標位置："& CRLF & "X: " & X & CRLF & "Y: " & Y & CRLF
+    Select Action
+    Case Activity.ACTION_MOVE
+       If (X>=155 AND X<=290) AND (Y>=231 AND Y<=368) Then
+	      Temp = Temp & "您打中靶心了!!!"  
+	   Else
+	      Temp = Temp & ""
+       End If
+	Case Activity.ACTION_DOWN
+       Temp = Temp & "以上是您目前「按下」的座標位置!!!" 
+    Case Activity.ACTION_UP
+       Temp = Temp & "以上是您目前「放開」的座標位置!!!"   
+    End Select
+	lblShowResult.Text = Temp
+End Sub
+
+Sub ExitApp_Click
+    Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "使用者螢幕物件APP", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.bmp"))
+    If Msg_Value = DialogResponse.POSITIVE Then
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If
+End Sub

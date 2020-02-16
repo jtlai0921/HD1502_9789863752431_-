@@ -1,0 +1,68 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch09.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 常用日期功能列表
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+    Dim btnRun As Button
+	Dim edtString As EditText
+	Dim lblResult As Label
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="常用日期功能列表"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun_Click    
+  Dim temp As String 
+  Dim now As Long
+  now=DateTime.now 
+  temp=temp & "西元年： " & DateTime.GetYear(now)  & CRLF
+  temp=temp & "月份： " & DateTime.GetMonth(now)  & CRLF
+  temp=temp & "日期： " & DateTime.Date(now)  & CRLF
+  temp=temp & "時間： " & DateTime.Time(now)  & CRLF
+  temp=temp & "當年第幾天： " & DateTime.GetDayofYear(now)  & CRLF
+  temp=temp & "當月第幾天： " & DateTime.GetDayofMonth(now)  & CRLF
+  temp=temp & "當週第幾天： " & DateTime.GetDayofWeek(now)  & CRLF
+  temp=temp & "時： " & DateTime.GetHour(now)  & CRLF
+  temp=temp & "分： " & DateTime.GetMinute(now)  & CRLF
+  temp=temp & "秒： " & DateTime.GetSecond(now)  & CRLF
+  
+  lblResult.Text=temp 
+End Sub

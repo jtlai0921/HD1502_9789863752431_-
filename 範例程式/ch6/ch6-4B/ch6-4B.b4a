@@ -1,0 +1,75 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch08.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 傳址呼叫(Call By Address)
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim lblResult As Label
+	Dim btnRun As Button
+	Dim edtNum1 As EditText
+	Dim edtNum2 As EditText
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="傳址呼叫(Call By Address)"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun_Click      
+ Dim X(1), Y(1), Result(1) As Int
+ Dim Temp As String
+ X(0) = edtNum1.Text 
+ Y(0) = edtNum2.Text
+ Result(0)=X(0)+Y(0)
+ Temp = "「傳址呼叫」呼叫前" & CRLF
+ Temp = Temp & "-------------------------------------" & CRLF
+ Temp = Temp & "X=" & X(0) & "　" & "Y=" & Y(0) & "　" & "Add=" & Result(0) & CRLF
+ CallByAddress(X,Y,Result)  '呼叫副程式
+ lblResult.Text = "X=" & X(0) & " Y=" & Y(0)
+ Temp = Temp & "「傳址呼叫」呼叫後" & CRLF
+ Temp = Temp & "-------------------------------------" & CRLF
+ Temp = Temp & "X=" & X(0) & "　" & "Y=" & Y(0) & "　" & "Add=" & Result(0)
+ lblResult.Text = Temp
+End Sub
+Sub CallByAddress(A() As Int, B() As Int,Add() As Int)  '副程式
+   A(0) = 15
+   B(0) = 30
+   Add(0) = A(0) + B(0)
+End Sub
+
+

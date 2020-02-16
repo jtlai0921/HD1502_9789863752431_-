@@ -1,0 +1,77 @@
+﻿Version=3
+IconFile=
+NumberOfModules=1
+Module1=CourseManager
+ModuleVisible1=1
+Package=Leech.Myebook.ch10
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=3
+File1=course.bal
+File2=Main.bal
+File3=MyeSchoolDB.sqlite
+NumberOfLibraries=2
+Library1=core
+Library2=sql
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 課程管理系統(教學版)
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim btnEnterCourseManager As Button
+	Dim btnExitApp As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'使用File.DirDefaultExternal
+	'SQLite資料庫會儲存到「SD卡」的根目錄/Android/data/<您專案的Package Name>/files/
+	'設定「Package Name」的步驟：B4A上方選擇Project／Package Name/com.Myebook.db
+	If File.Exists(File.DirDefaultExternal, "MyeSchoolDB.sqlite") _
+	       = False Then  '判斷「SD卡」是否存在資料庫檔案，如果沒有，則
+       File.Copy(File.DirAssets, "MyeSchoolDB.sqlite", _
+	   File.DirDefaultExternal,"MyeSchoolDB.sqlite")  '從Files頁籤中的資料庫檔案複製到「SD卡」中
+    End If
+	Activity.LoadLayout("Main")
+    Activity.Title="課程管理系統(教學版)"
+End Sub
+
+Sub btnEnterCourseManager_Click
+	StartActivity(CourseManager)  '進入課程管理系統(管理介面)
+End Sub
+Sub btnExitApp_Click
+	Dim Msg_Value As String
+    Msg_Value = Msgbox2("您確定要結束本系統嗎?", "課程管理系統APP", "確認", "", "取消", LoadBitmap(File.DirAssets,"Leech_icon.jpg"))
+    If Msg_Value = DialogResponse.POSITIVE Then
+        Activity.Finish()  '活動完成
+        ExitApplication    '離開
+    End If	
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+
+

@@ -1,0 +1,62 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch11.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=3
+File1=Leech_icon.bmp
+File2=Leech_icon.gif
+File3=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 對話訊息方塊(傳回值MsgBox2)
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+  Dim Button1 As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")
+    Activity.Title ="對話訊息方塊(傳回值MsgBox2)"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub Button1_Click
+   Dim Msg_Value As String
+   Msg_Value=Msgbox2("訊息內容","標題","同意鈕","取消鈕","不同意鈕",LoadBitmap(File.DirAssets,"Leech_icon.bmp"))
+   If Msg_Value=DialogResponse.POSITIVE Then
+     Msgbox2("您剛才按了「同意鈕」","回覆標題","","","",LoadBitmap(File.DirAssets,"Leech_icon.bmp")) 
+   Else If Msg_Value=DialogResponse.CANCEL Then
+     Msgbox2("您剛才按了「取消鈕」","回覆標題","","","",LoadBitmap(File.DirAssets,"Leech_icon.bmp")) 
+   Else
+     Msgbox2("您剛才按了「不同意鈕」","回覆標題","","","",LoadBitmap(File.DirAssets,"Leech_icon.bmp")) 
+   End If
+End Sub

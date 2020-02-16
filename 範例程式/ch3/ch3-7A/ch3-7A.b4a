@@ -1,0 +1,81 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch11.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 複選鈕的應用
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim edtName As EditText
+	Dim lblResult As Label
+	Dim btnRun As Button
+	Dim chkProgram As CheckBox
+	Dim chkDB As CheckBox
+	Dim chkDS As CheckBox
+	Dim chkSA As CheckBox
+	Dim chkComputer As CheckBox
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")
+    Activity.Title ="複選鈕的應用"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+  
+End Sub
+
+Sub btnRun_Click
+If edtName.Text="" Then
+   Msgbox("您尚未輸入姓名哦!","產生錯誤...")
+Else
+  Dim Temp As String
+  Temp = edtName.Text & " 同學  您好：" & CRLF
+  Temp = Temp & "你喜歡的科目為：" & CRLF
+   If chkProgram.Checked = True Then
+      Temp = Temp & chkProgram.Text & CRLF
+   End If
+   If chkDB.Checked = True Then
+      Temp = Temp & chkDB.Text & CRLF
+   End If
+   If chkDS.Checked = True Then
+      Temp = Temp & chkDS.Text & CRLF
+   End If
+   If chkSA.Checked = True Then
+      Temp = Temp & chkSA.Text & CRLF
+   End If
+   If chkComputer.Checked = True Then
+      Temp = Temp & chkComputer.Text & CRLF
+   End If
+   lblResult.Text = Temp
+End If
+End Sub

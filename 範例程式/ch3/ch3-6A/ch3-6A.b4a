@@ -1,0 +1,80 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch11.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 單選鈕的應用
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim edtName As EditText
+	Dim rdoProgram As RadioButton
+	Dim rdoDB As RadioButton
+	Dim rdoDS As RadioButton
+	Dim rdoSA As RadioButton
+	Dim rdoComputer As RadioButton
+	Dim rdoELearning As RadioButton
+	Dim lblResult As Label
+	Dim btnRun As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")
+    Activity.Title ="單選鈕的應用"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+  
+End Sub
+
+Sub btnRun_Click
+If edtName.Text="" Then
+   Msgbox("您尚未輸入姓名哦!","產生錯誤...")
+Else
+  Dim Temp As String
+  Temp = edtName.Text & " 同學  您好：" & CRLF
+  Temp = Temp & "你喜歡的科目為：" & CRLF
+  If rdoProgram.Checked = True Then         '點選程式設計
+    Temp = Temp & rdoProgram.Text
+  Else If rdoDB.Checked = True Then         '點選資料庫系統
+    Temp = Temp & rdoDB.Text
+  Else If rdoDS.Checked = True Then         '點選資料結構
+    Temp = Temp & rdoDS.Text
+  Else If rdoSA.Checked = True Then         '點選系統分析
+    Temp = Temp & rdoSA.Text
+  Else If rdoComputer.Checked = True Then   '點選計算機概論
+    Temp = Temp & rdoComputer.Text
+  Else If rdoELearning.Checked = True Then  '點選數位學習
+    Temp = Temp & rdoELearning.Text
+  End If
+  lblResult.Text = Temp
+End If
+End Sub

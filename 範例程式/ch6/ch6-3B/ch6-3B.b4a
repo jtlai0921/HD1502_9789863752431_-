@@ -1,0 +1,74 @@
+﻿Version=3
+IconFile=
+NumberOfModules=0
+Package=Leech.myebook.ch08.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=1
+File1=Main.bal
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: 傳值呼叫(Call By Value)
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	Dim lblResult As Label
+	Dim btnRun As Button
+	Dim edtNum1 As EditText
+	Dim edtNum2 As EditText
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   Activity.LoadLayout("Main")
+   Activity.Title="傳值呼叫(Call By Value)"
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub btnRun_Click      
+ Dim X, Y, Result As Int
+ Dim Temp As String
+ X = edtNum1.Text 
+ Y = edtNum2.Text
+ Temp = "「傳值呼叫」呼叫前" & CRLF
+ Temp = Temp & "--------------------------------" & CRLF
+ Temp = Temp & "X=" & X & "　" & "Y=" & Y & "　" & "Add=" & Result & CRLF
+ CallByValue(X,Y,Result)  '呼叫副程式
+ lblResult.Text = "X=" & X & " Y=" & Y
+ Temp = Temp & "「傳值呼叫」呼叫後" & CRLF
+ Temp = Temp & "--------------------------------" & CRLF
+ Temp = Temp & "X=" & X & "　" & "Y=" & Y & "　" & "Add=" & Result
+ lblResult.Text = Temp
+End Sub
+Sub CallByValue(A As Int, B As Int,Add)  '副程式
+   A = 15
+   B = 30
+   Add = A + B
+End Sub
+
+

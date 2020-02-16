@@ -1,0 +1,101 @@
+﻿Version=3
+IconFile=
+NumberOfModules=3
+Module1=HttpUtils
+ModuleVisible1=1
+Module2=HttpUtilsService
+ModuleVisible2=1
+Module3=Myebook
+ModuleVisible3=1
+Package=anywheresoftware.b4a.samples.sqlserver
+DoNotOverwriteManifest=False
+ManifestCode=
+UserTypesHint=
+NumberOfFiles=2
+File1=Main.bal
+File2=Myebook.bal
+NumberOfLibraries=3
+Library1=core
+Library2=http
+Library3=json
+@EndOfDesignText@
+#Region Module Attributes
+	#FullScreen: False
+	#IncludeTitle: True
+	#ApplicationLabel: SQL Server
+	#VersionCode: 1
+	#VersionName: 
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+Sub Process_Globals
+    Dim DNS As String             '宣告網域名稱  
+    Dim ServerUrl As String       '宣告Web Service的網址
+	Dim StrSQL As String          '宣告SQL的查詢指令字串
+	'測試php程式是否可以讀取資料庫
+	'指定網域名稱 
+	DNS = "http://120.118.165.192:81/B4ASQL/b4asql-1.php?sqlre=Select * from Myebook"
+	'指定Web Service的網址
+	ServerUrl = "http://120.118.165.192:81/B4ASQL/b4asql.php"
+	StrSQL="select * from Myebook"     'SQL的查詢指令
+End Sub
+
+Sub Globals
+	Dim btnLoadMySQLDB As Button  '讀取遠端DB
+	Dim ListView1 As ListView         '顯示回覆的書籍資料
+	Dim btnView1 As Button            '瀏覽遠端DB(模式一)
+	Dim btnView2 As Button            '瀏覽遠端DB(模式二)
+	Dim JSON As JSONParser            'JSONParser物件是用來剖析JSON資料(類似XML)
+	Dim response As String            '取得Web Service的回覆
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Main")                 '使用「Main(版面配置檔)」來輸出
+    Activity.Title ="B4A讀取MySQL資料"     '本頁面的標題名稱
+	If FirstTime Then                           
+		HttpUtils.CallbackActivity = "Main"      '設定回覆的活動頁面名稱
+		HttpUtils.CallbackJobDoneSub = "JobDone" '設定當HTTP完成下載工作之後，所要觸發的事件名稱
+	End If
+	'B4A透過HttpUtils函數庫中的PostString( )方法來提出http要求
+	'ServerUrl代表網站中Web Service的網址，StrSQL是指對此Web Service查詢的指令
+	HttpUtils.PostString("MyJob", ServerUrl, StrSQL)
+End Sub
+
+Sub JobDone (Job As String)
+	If HttpUtils.IsSuccess(ServerUrl) Then        '如果HttpUtils函數庫中的IsSuccess( )方法與Web Service連線成功時。
+		ToastMessageShow("資料載入完成!!", True)  '顯示資料載入完成!!
+		response = HttpUtils.GetString(ServerUrl) '取得Web Service的回覆
+		JSON.Initialize(response)                 '用來剖析「Web Service的回覆」資料格式內容
+	Else                                          '下載失敗
+		ToastMessageShow("載入失敗!!", True)      '顯示載入失敗!!
+	End If	
+	HttpUtils.Complete = False                    '關閉向Web Service提出的要求
+End Sub
+
+Sub btnLoadMySQLDB_Click         'B4A讀取SQL Server資料
+	Dim ArrayRows As List            'ArrayRows視為陣列
+	Dim Key_Value As Map             'Key_Value視為成對的(key和Value)
+    ArrayRows = JSON.NextArray()     '將取得的JSON資料剖析成List串列(亦即資料列)
+	For i = 0 To ArrayRows.Size - 1  '顯示全部的記錄（資料列）
+		Key_Value = ArrayRows.Get(i) '取得每一筆記錄
+		ListView1.AddTwoLines((i+1) & ". 書號： " & Key_Value.Get("Book_No"),"書名：" & Key_Value.Get("Book_Name")) '顯示記錄的中的「Book_No」與「Book_Name」欄位值
+	Next
+End Sub
+
+Sub btnView1_Click    '瀏覽遠端DB(模式1)
+	StartActivity(Myebook)
+End Sub
+
+Sub btnView2_Click    '瀏覽遠端DB(模式2)
+	Dim i As Intent
+    i.Initialize(i.ACTION_VIEW, DNS)
+    StartActivity(i)
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+	
+End Sub
